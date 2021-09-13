@@ -90,6 +90,13 @@ class TestConsumer(WebsocketConsumer):
     #     # Called when the socket closes
     #     pass
 
+    def send_notification(self, event ):
+        print("yes its working bitch")
+        print(event)
+
+        self.send(text_data=json.dumps({"status":"yes its connected"}))
+        print("yoooo yeeaaaaah")
+
 
 class ChatConsumer(WebsocketConsumer):
 
