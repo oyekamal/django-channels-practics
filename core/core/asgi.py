@@ -25,14 +25,14 @@ ws_patterns = [
     path("ws/chat/", ChatConsumer.as_asgi()),
 ] 
 
-# application = ProtocolTypeRouter({
-#     'websocket' : URLRouter(ws_patterns)
-# })
-
 application = ProtocolTypeRouter({
-    'websocket': AuthMiddlewareStack(
-        URLRouter(
-            ws_patterns
-        )
-    ),
+    'websocket' : URLRouter(ws_patterns)
 })
+
+# application = ProtocolTypeRouter({
+#     'websocket': AuthMiddlewareStack(
+#         URLRouter(
+#             ws_patterns
+#         )
+#     ),
+# })
