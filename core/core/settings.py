@@ -72,35 +72,35 @@ TEMPLATES = [
 # WSGI_APPLICATION = 'core.wsgi.application'
 ASGI_APPLICATION = 'core.asgi.application'
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("localhost", 6379)],
-#         },
-#     },
-# }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+    },
+}
 
 
 # pyamqp://ocs_broker:rapidev@192.168.18.27/v_ocs_broker 
 
 
-CELERY_BROKER_URL = 'amqp://ocs_broker:rapidev@192.168.18.27/v_ocs_broker'
-# CELERY_BROKER_URL = "amqp://guest:guest@192.168.18.27:5672"
-CELERY_RESULT_BACKEND = ''
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Karachi'
+# CELERY_BROKER_URL = 'amqp://ocs_broker:rapidev@192.168.18.27/v_ocs_broker'
+# # CELERY_BROKER_URL = "amqp://guest:guest@192.168.18.27:5672"
+# CELERY_RESULT_BACKEND = ''
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'Asia/Karachi'
 
-CHANNEL_LAYERS = {
-     "default": {
-         "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
-         "CONFIG": {
-            "host": "amqp://ocs_broker:rapidev@192.168.18.27/v_ocs_broker",
-        },
-      },
-  }
+# CHANNEL_LAYERS = {
+#      "default": {
+#          "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
+#          "CONFIG": {
+#             "host": "amqp://ocs_broker:rapidev@192.168.18.27/v_ocs_broker",
+#         },
+#       },
+#   }
 
 
 # Database

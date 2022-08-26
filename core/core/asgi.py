@@ -18,16 +18,41 @@ from home.consumers import *
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
 application = get_asgi_application()
+django_asgi_app = get_asgi_application()
+
+# ws_patterns = [
+#     path("ws/test/", TestConsumer.as_asgi() ),
+#     # path("ws/chat/", ChatConsumer.as_asgi()),
+# ] 
+
+# application = ProtocolTypeRouter({
+#     'websocket' : URLRouter(ws_patterns)
+# })
 
 
-ws_patterns = [
-    path("ws/test/", TestConsumer.as_asgi() ),
-    path("ws/chat/", ChatConsumer.as_asgi()),
-] 
+import os
+
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.security.websocket import AllowedHostsOriginValidator
+
+
+from . import routing
 
 application = ProtocolTypeRouter({
-    'websocket' : URLRouter(ws_patterns)
+  "http": django_asgi_app,
+  "websocket": 
+        AuthMiddlewareStack(
+            URLRouter(
+                routing.websocket_urlpatterns
+            )
+        )
+    
 })
+# application = ProtocolTypeRouter({
+#     'websocket' : URLRouter(routing.websocket_urlpatterns)
+# })
+
 
 # application = ProtocolTypeRouter({
 #     'websocket': AuthMiddlewareStack(

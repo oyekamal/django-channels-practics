@@ -100,28 +100,54 @@ class TestConsumer(WebsocketConsumer):
 
 class ChatConsumer(WebsocketConsumer):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.room_name = None
+        self.room_group_name = None
+        self.room = None
+        self.user = None  # new
 
     def connect(self):
-        self.room_name = 'room'
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
+        self.user = self.scope['user']  # new
 
+        print("user--- ", self.user)
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
+
         self.accept()
 
     def disconnect(self, close_code):
-        # leave group room
+        # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
-        self.send(text_data=json.dumps({
-            'message': "you are disconnected"
-        }))
 
+    # Receive message from WebSocket
     def receive(self, text_data):
-        data = json.loads(text_data)
-        self.commands[data['command']](self, data)
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+
+        # Send message to room group
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message': message
+            }
+        )
+
+    # Receive message from room group
+    def chat_message(self, event):
+        message = event['message']
+
+        # Send message to WebSocket
+        self.send(text_data=json.dumps({
+            'message': message,
+            "room_name": self.room_name
+        }))
